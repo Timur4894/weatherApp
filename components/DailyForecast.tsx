@@ -2,27 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { useCity } from '../context/local-store'; 
 
-const API_KEY = '594ef7a511cdd577a499e8bf61498c70'; // Вставьте свой API ключ OpenWeatherMap
-const CITY = 'Kyiv'; 
+const API_KEY = '594ef7a511cdd577a499e8bf61498c70';
 
 interface WeatherData {
   dt_txt: string;
   main: {
     temp: number;
   };
+  weather: {
+    main: string;
+  }[];
 }
 
 function DailyForecast() {
   const [weatherForecast, setWeatherForecast] = useState<WeatherData[]>([]);
+  const [weatherTypes, setWeatherTypes] = useState<string[]>([]);
+  const { selectedCity } = useCity(); 
 
   useEffect(() => {
     const fetchWeatherForecast = async () => {
-      const API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${CITY}&appid=${API_KEY}&units=metric`;
+      const API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${selectedCity}&appid=${API_KEY}&units=metric`;
 
       try {
         const response = await axios.get(API_URL);
         const data = response.data.list.slice(0, 7);
+
+        const types = data.map((forecast: WeatherData) => forecast.weather[0].main);
+        setWeatherTypes(types);
+
         setWeatherForecast(data);
       } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -30,12 +39,27 @@ function DailyForecast() {
     };
 
     fetchWeatherForecast();
-  }, []);
+  }, [selectedCity]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: any = { month: 'short', day: 'numeric', hour: 'numeric'};
     return date.toLocaleDateString('en-US', options);
+  };
+
+  const getWeatherImage = (weatherType: string) => {
+    switch (weatherType) {
+      case 'Clear':
+        return require('../constants/icons/free-icon-sun-14838470.png');
+      case 'Clouds':
+        return require('../constants/icons/free-icon-sun-14838434.png');
+      case 'Rain':
+        return require('../constants/icons/free-icon-weather-12607703.png');
+      case 'Thunderstorm':
+        return require('../constants/icons/free-icon-storm-14838448.png');
+      default:
+        return require('../constants/icons/free-icon-rainbow-14838482.png');
+    }
   };
 
   return (
@@ -55,7 +79,7 @@ function DailyForecast() {
               </View>
               <Image
                 style={styles.img}
-                source={require('../constants/icons/free-icon-sun-14838434.png')}
+                source={getWeatherImage(weatherTypes[index])}
                 resizeMode="contain"
               />
             </View>

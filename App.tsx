@@ -4,10 +4,12 @@ import CityName from './components/CityName';
 import { CityProvider } from './context/local-store';
 export default function App() {
   return (
-    <CityProvider>
-      <MainScreen/>
-      <StatusBar style="light" />
-    </CityProvider>
+    <>
+      <CityProvider>
+        <MainScreen/>
+        <StatusBar style="light" />
+      </CityProvider>
+    </>
   );
 }
 

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import { CityProvider } from "../context/local-store";
-
+import { useCity } from '../context/local-store'; 
 
 function Search() {
-  const [nameOfTheCity, setNameOfTheCity] = useState('');
+  const { selectedCity, setSelectedCity } = useCity(); 
+
+  const [nameOfTheCity, setNameOfTheCity] = useState<string>('');
   const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
 
   const handleSearch = async (value: string) => {
@@ -23,9 +24,11 @@ function Search() {
   };
 
   const handleSelectCity = (city: string) => {
+    setSelectedCity(city); 
     setNameOfTheCity(city);
-    setCitySuggestions([]); // Скрыть список подсказок при выборе города
+    setCitySuggestions([]);
   };
+  console.log(selectedCity)
 
   const renderCityItem = ({ item }: { item: string }) => (
     <TouchableOpacity onPress={() => handleSelectCity(item)}>
@@ -60,18 +63,18 @@ function Search() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    alignItems: "center",
-    marginTop: "13%",
+    alignItems: 'center',
+    marginTop: '13%',
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0d1",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0d1',
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderWidth: 2,
-    borderColor: "#f0f0f0d1",
+    borderColor: '#f0f0f0d1',
     marginHorizontal: 10,
   },
   icon: {
@@ -80,16 +83,16 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: "black",
+    color: 'black',
   },
   suggestionsContainer: {
     position: 'absolute',
-    top: 50, // или другое значение, чтобы подсказки не перекрывали текстовое поле
+    top: 50,
     left: 20,
     right: 20,
-    backgroundColor: "#dfdfdfda",
+    backgroundColor: '#dfdfdfda',
     borderRadius: 13,
-    elevation: 3, 
+    elevation: 3,
   },
   cityItem: {
     padding: 12,

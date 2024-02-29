@@ -1,39 +1,27 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext } from 'react';
+
+interface CityContextType {
+  selectedCity: string;
+  setSelectedCity: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const CityContext = createContext<CityContextType>({
+  selectedCity: '',
+  setSelectedCity: () => {},
+});
 
 interface CityProviderProps {
   children: React.ReactNode;
 }
 
-const CityContext = createContext<string | null>(null);
-
 export const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
-  const [selectedCity, setCity] = React.useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string>('');
 
   return (
-    <CityContext.Provider value={selectedCity}>
+    <CityContext.Provider value={{ selectedCity, setSelectedCity }}>
       {children}
     </CityContext.Provider>
   );
 };
 
-export const useSelectedCity = (): string | null => {
-  const selectedCity = useContext(CityContext);
-  if (selectedCity === null) {
-    throw new Error("useSelectedCity must be used within a CityProvider");
-  }
-  return selectedCity;
-};
-
-interface SetSelectedCityProps {
-  setCity: (city: string) => void;
-}
-
-export const SetSelectedCity: React.FC<SetSelectedCityProps> = ({ setCity }) => {
-  useEffect(() => {
-    // Здесь мы можем вызвать setCity с нужным городом при монтировании компонента
-    setCity("Initial City");
-  }, [setCity]); // Указываем зависимость, чтобы вызвать useEffect только при изменении setCity
-
-  // Компонент не должен возвращать ничего визуального
-  return null;
-};
+export const useCity = (): CityContextType => useContext(CityContext);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import axios from 'axios';
+import { useCity } from '../context/local-store'; 
 
 interface WeatherData {
     main: {
@@ -11,17 +12,18 @@ interface WeatherData {
     }[];
 }
 
-function Degree () {
+function Degree() {
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-    const cityName = 'Kyiv'; 
+    const { selectedCity } = useCity();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const apiKey = '594ef7a511cdd577a499e8bf61498c70';
-                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
-                const response = await axios.get<WeatherData>(url);
                 
+                const apiKey = '594ef7a511cdd577a499e8bf61498c70';
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&appid=${apiKey}&units=metric`;
+                const response = await axios.get<WeatherData>(url);
+                console.log(response)
                 setWeatherData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -29,7 +31,7 @@ function Degree () {
         };
 
         fetchData();
-    }, []);
+    }, [selectedCity]); 
 
     return (
         <View style={styles.root}>
@@ -40,11 +42,11 @@ function Degree () {
                             {weatherData.main.temp}°C
                         </Text>
                     </View> 
-                    <View>
+                    {/* <View>
                         <Text style={styles.smallText}>
                             {weatherData.weather[0].description}
                         </Text>
-                    </View>
+                    </View> */}
                 </>
             )}
         </View>

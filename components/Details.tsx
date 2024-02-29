@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import axios from 'axios';
+import { useCity } from '../context/local-store'; 
+
 
 interface WeatherData {
     wind: {
@@ -30,13 +32,14 @@ function Details (){
     const [wind, setWind] = useState<WindData | null>(null);
     const [sunRise, setSunRise] = useState<SunriseData | null>(null);
     const [clouds, setClouds] = useState<CloudsData | null>(null);
-    const cityName = 'Kyiv'; 
+    //const cityName = 'Kyiv';
+    const { selectedCity } = useCity(); 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const apiKey = '594ef7a511cdd577a499e8bf61498c70';
-                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&appid=${apiKey}&units=metric`;
                 const response = await axios.get<WeatherData>(url);
                 const windData: WindData = {
                     speed: response.data.wind.speed
@@ -56,7 +59,7 @@ function Details (){
         };
 
         fetchData();
-    }, []);
+    }, [selectedCity]);
 
     return(
         <View style={styles.root}>
