@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useCity } from '../context/local-store';
+import { useCity } from '../../context/local-store';
 import axios from 'axios';
 
 // Определим интерфейс для данных о городе

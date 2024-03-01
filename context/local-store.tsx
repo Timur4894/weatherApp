@@ -17,6 +17,8 @@ interface CityProviderProps {
 export const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
   const [selectedCity, setSelectedCity] = useState<string>('');
 
+
+
   return (
     <CityContext.Provider value={{ selectedCity, setSelectedCity }}>
       {children}

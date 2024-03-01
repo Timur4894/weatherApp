@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import axios from 'axios';
-import { useCity } from '../context/local-store'; 
+import { useCity } from '../../context/local-store'; 
 
 interface WeatherData {
     main: {

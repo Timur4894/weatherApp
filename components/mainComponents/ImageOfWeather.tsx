@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
-import { useCity } from '../context/local-store';
+import { useCity } from '../../context/local-store';
 
 function ImageOfWeather() {
     const { selectedCity } = useCity();
@@ -27,15 +27,15 @@ function ImageOfWeather() {
     const getWeatherImage = (weatherType: string) => {
         switch (weatherType) {
             case 'Clear':
-                return require('../constants/icons/free-icon-sun-14838470.png');
+                return require('../icons/free-icon-sun-14838470.png');
             case 'Clouds':
-                return require('../constants/icons/free-icon-sun-14838434.png');
+                return require('../icons/free-icon-sun-14838434.png');
             case 'Rain':
-                return require('../constants/icons/free-icon-weather-12607703.png');
+                return require('../icons/free-icon-weather-12607703.png');
             case 'Thunderstorm':
-                return require('../constants/icons/free-icon-storm-14838448.png');
+                return require('../icons/free-icon-storm-14838448.png');
             default:
-                return require('../constants/icons/free-icon-rainbow-14838482.png'); // Заглушка по умолчанию
+                return require('../icons/free-icon-rainbow-14838482.png'); // Заглушка по умолчанию
         }
     };
 
