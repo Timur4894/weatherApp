@@ -22,6 +22,11 @@ Before getting started, make sure you have Node.js and npm installed on your mac
 
 2. Follow the instructions in the terminal to run the application on an emulator or device.
 
+## Screenshot
+
+![image](https://github.com/Timur4894/weatherApp/assets/92123398/dcc55371-ebd4-4b0b-ba87-f59862c669a8)
+
+
 ## Usage
 
 The application provides an interface to retrieve weather information for selected locations. You can use various features such as city search, viewing current weather, and multi-day forecasts.
