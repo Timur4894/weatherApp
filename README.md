@@ -41,9 +41,9 @@ To fetch weather data, we utilize the "weatherapi" API. You can find more detail
 - TypeScript
 - Axios
 
-## Author
 
-This project is developed and maintained by [Your Name].
+
+
 
 ## License
 
