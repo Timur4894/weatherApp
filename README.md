@@ -45,6 +45,6 @@ To fetch weather data, we utilize the "weatherapi" API. You can find more detail
 
 
 
-## License
 
-This project is licensed under the terms of the MIT license. See the LICENSE file for details.
+
+
