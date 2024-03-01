@@ -38,8 +38,11 @@ function DailyForecast() {
       }
     };
 
+
     fetchWeatherForecast();
   }, [selectedCity]);
+
+  console.log(weatherForecast.map)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -65,15 +68,15 @@ function DailyForecast() {
   return (
     <View style={styles.root}>
       <View style={styles.icon}>
-        <Ionicons name="calendar" size={20} color="white" />
+        <Ionicons name="calendar" size={20} color="#014179" style={{marginEnd: 5}} />
         <Text style={styles.icontext}>Daily forecast</Text>
       </View>
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.scrollinfo}>
-          {weatherForecast.map((forecast, index) => (
+          {weatherForecast.length  ? weatherForecast.map((forecast, index) => (
             <View style={styles.weatherinfo} key={index}>
-              <View style={styles.icon}>
+              <View style={styles.iconforinfo}>
                 <Text style={styles.infotext}>{formatDate(forecast.dt_txt)} | </Text> 
                 <Text style={styles.infotext}>{forecast.main.temp}°C</Text> 
               </View>
@@ -83,7 +86,7 @@ function DailyForecast() {
                 resizeMode="contain"
               />
             </View>
-          ))}
+          )) : <Text style={{ fontSize: 30, color: 'white'}}>Chose the location</Text>}
         </View>
       </ScrollView>
     </View>
@@ -94,9 +97,13 @@ const styles = StyleSheet.create({
   root: {
     flex: 2,
     alignItems: 'flex-start',
-    marginLeft: 20,
+    marginLeft: 0,
   },
   icon: {
+    flexDirection: 'row',
+    marginLeft: 20,
+  },
+  iconforinfo: {
     flexDirection: 'row',
   },
   img: {
@@ -104,9 +111,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   icontext: {
-    color: 'white',
+    color: '#05447a',
     margin: 2,
-    fontWeight: '500',
+    fontWeight: '800',
   },
   infotext: {
     color: 'white',
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 80,
     alignItems: 'center',
-    backgroundColor: '#a4b3fb39',
+    backgroundColor: '#0088ff5c',
     borderRadius: 15,
     marginRight: 10,
     borderWidth: 0,

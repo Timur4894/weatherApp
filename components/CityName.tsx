@@ -34,7 +34,7 @@ function CityName() {
             <View style={styles.cityBlock}>
                 {cityData && ( // Проверяем, что данные о городе загружены
                     <>
-                        <Text style={styles.cityName}>{selectedCity},</Text>
+                        <Text style={styles.cityName}>{selectedCity}, </Text>
                         <Text style={styles.cityArea}>{cityData.sys.country}</Text>
                     </>
                 )}
@@ -51,11 +51,12 @@ const styles = StyleSheet.create({
     cityName: {
         fontSize: 25, 
         fontWeight: '900',
-        color: 'white'
+        color: '#ffffff'
     },
     cityArea: {
         fontSize: 25, 
-        color: 'white'
+        color: '#fff',
+        fontWeight: '900',
     },
     cityBlock: {
         flexDirection: 'row',

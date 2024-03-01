@@ -60,15 +60,11 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     text: {
-        fontSize: 25, 
+        fontSize: 36, 
         fontWeight: '900',
-        color: 'white'
+        color: '#05447a'
     },
-    smallText: {
-        fontSize: 15, 
-        fontWeight: '500',
-        color: 'white'
-    },
+
 });
 
 export default Degree;

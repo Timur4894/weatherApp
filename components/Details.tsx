@@ -64,16 +64,16 @@ function Details (){
     return(
         <View style={styles.root}>
                 <View style={styles.iconContainer}>
-                    <Ionicons name='balloon' size={24} color='white'/>
+                    <Ionicons name='balloon' size={24} color='#05447a' style={{marginEnd: 5}}/>
                     <Text style={styles.text}>{wind ? `${wind.speed} km/h` : '-'}</Text>
                 </View>
                 <View style={styles.iconContainer}>
-                    <Ionicons name="rainy" size={24} color='white'/>
+                    <Ionicons name="rainy" size={24} color='#05447a' style={{marginEnd: 5}}/>
                     <Text style={styles.text}>{clouds ? `${clouds.all} %` : '-'}</Text>
                 </View>
 
                 <View style={styles.iconContainer}>
-                    <Ionicons name="sunny" size={24} color='white'/>
+                    <Ionicons name="sunny" size={24} color='#05447a' style={{marginEnd: 5}}/>
                     <Text style={styles.text}>{sunRise ? new Date(sunRise.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}</Text>
                 </View> 
         </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         padding: 2,
-        color: 'white'
+        color: '#05447a'
     }
 })
 

@@ -6,7 +6,7 @@ import Details from "../components/Details";
 import Degree from "../components/Degree";
 import DailyForecast from "../components/DailyForecast";
 
-const image = {uri: 'https://static.vecteezy.com/system/resources/previews/008/842/741/original/blue-social-media-duotone-gradient-background-social-network-stories-soft-colorful-theme-navy-graphic-display-wallpaper-modern-vibrant-mobile-app-design-blending-bright-duo-colors-template-vector.jpg'};
+const image = {uri: 'https://img.freepik.com/free-vector/simple-gradient-background-vector-winter-blue_53876-105767.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1708387200&semt=ais'};
 
 function MainScreen (){
     return(
@@ -26,7 +26,6 @@ function MainScreen (){
 const styles = StyleSheet.create({
     root: {
         flex: 2,
-        
     },
     image: {
         flex: 1,
