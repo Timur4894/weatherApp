@@ -1,12 +1,16 @@
-// Компонент Search с добавлением и удалением избранных городов
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useCity } from '../../context/local-store';
 import { useFavoriteCities } from '../../context/FavoriteCitiesContext';
+import { useNavigation } from '@react-navigation/native';
+
 
 function Search() {
+
+  const navigation = useNavigation();
+
   const { selectedCity, setSelectedCity } = useCity(); 
   const { addFavoriteCity, removeFavoriteCity, favoriteCities } = useFavoriteCities();
 
@@ -76,7 +80,7 @@ function Search() {
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={24} color="gray" style={styles.icon} />
         <TextInput
-          onChangeText={setNameOfTheCity}
+          onChangeText={handleSearch}
           value={nameOfTheCity}
           placeholder="Search"
           placeholderTextColor="gray"
@@ -92,6 +96,12 @@ function Search() {
           style={styles.suggestionsContainer}
         />
       )}
+      
+      <View style={styles.moreIconContainer}>
+        <Pressable onPress={() => navigation.navigate('SavedCities')}>
+          <Ionicons name='menu-sharp' size={38} color="white" />
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -101,6 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: '13%',
+    position: 'relative',
   },
   searchContainer: {
     flexDirection: 'row',
@@ -140,6 +151,11 @@ const styles = StyleSheet.create({
   },
   cityItem: {
     fontSize: 16,
+  },
+  moreIconContainer: {
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginTop: '6%',
   },
 });
 
