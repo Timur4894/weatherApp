@@ -3,16 +3,9 @@ import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity, Pressabl
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useCity } from '../../context/local-store';
-import { useFavoriteCities } from '../../context/FavoriteCitiesContext';
-import { useNavigation } from '@react-navigation/native';
-
 
 function Search() {
-
-  const navigation = useNavigation();
-
   const { selectedCity, setSelectedCity } = useCity(); 
-  const { addFavoriteCity, removeFavoriteCity, favoriteCities } = useFavoriteCities();
 
   const [nameOfTheCity, setNameOfTheCity] = useState<string>('');
   const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
@@ -23,16 +16,24 @@ function Search() {
 
   const handleSearch = async (value: string) => {
     setNameOfTheCity(value);
-
+  
     try {
       const apiKey = '594ef7a511cdd577a499e8bf61498c70';
       const response = await axios.get(`https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${apiKey}`);
       const cities = response.data.list.map((city: { name: string }) => city.name);
       setCitySuggestions(cities);
-    } catch (error) {
-      console.error('Error fetching city suggestions:', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        // Обработка ошибки, если запрос был неудачным из-за ошибки 401 (например, неверный API ключ)
+        console.error('Unauthorized error:', error);
+      } else if (error.response && error.response.status === 400) {
+        // Ничего при ошибке 400
+      } else {
+        console.error('Error fetching city suggestions:', error);
+      }
     }
   };
+  
 
   const handleSelectCity = (city: string) => {
     setSelectedCity(city); 
@@ -40,25 +41,10 @@ function Search() {
     setCitySuggestions([]);
   };
 
-  const handleToggleFavorite = (city: string) => {
-    if (favoriteCities.includes(city)) {
-      removeFavoriteCity(city);
-    } else {
-      addFavoriteCity(city);
-    }
-  };
-
   const renderCityItem = ({ item }: { item: string }) => (
     <TouchableOpacity onPress={() => handleSelectCity(item)}>
       <View style={styles.cityItemContainer}>
         <Text style={styles.cityItem}>{item}</Text>
-        <TouchableOpacity onPress={() => handleToggleFavorite(item)}>
-          <Ionicons
-            name={favoriteCities.includes(item) ? "star" : "star-outline"}
-            size={24}
-            color={favoriteCities.includes(item) ? "yellow" : "gray"}
-          />
-        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -73,7 +59,6 @@ function Search() {
       console.error('Error fetching city suggestions:', error);
     }
   };
-  
 
   return (
     <View style={styles.root}>
@@ -89,19 +74,14 @@ function Search() {
         />
       </View>
       {citySuggestions.length > 0 && (
-        <FlatList
-          data={citySuggestions}
-          renderItem={renderCityItem}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.suggestionsContainer}
-        />
-      )}
-      
-      <View style={styles.moreIconContainer}>
-        <Pressable onPress={() => navigation.navigate('SavedCities')}>
-          <Ionicons name='menu-sharp' size={38} color="white" />
+        <Pressable style={styles.suggestionsContainer} onPress={() => setCitySuggestions([])}>
+          <FlatList
+            data={citySuggestions}
+            renderItem={renderCityItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </Pressable>
-      </View>
+      )}
     </View>
   );
 }
@@ -110,7 +90,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '13%',
+    marginTop: '15%',
     position: 'relative',
   },
   searchContainer: {
@@ -147,15 +127,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
-
   },
   cityItem: {
     fontSize: 16,
-  },
-  moreIconContainer: {
-    alignSelf: 'flex-start',
-    marginLeft: 20,
-    marginTop: '6%',
   },
 });
 

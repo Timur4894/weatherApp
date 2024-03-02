@@ -29,10 +29,18 @@ export default function App() {
             {isAuthenticated ? (
               <>
                 <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false}} />
-                <Stack.Screen name="SavedCities" component={SavedCities} options={{ headerShown: false}}/>
+                <Stack.Screen
+                  name="SavedCities"
+                  component={SavedCities}
+                  options={{
+                    title: 'Back',
+                    headerStyle: { backgroundColor: 'black' }, // Устанавливаем задний фон в синий цвет
+                    headerTintColor: 'white', // Устанавливаем цвет текста заголовка
+                  }}
+                />
+
               </>
             ) : (
-              // Если пользxxxователь не аутентифицирован, показываем экран с авторизацией
               <Stack.Screen name="LoginScreen" options={{ headerShown: false}}>
                 {props => <LoginScreen {...props} onLogin={handleLogin}/>}
               </Stack.Screen>

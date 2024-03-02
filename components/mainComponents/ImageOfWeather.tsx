@@ -15,9 +15,16 @@ function ImageOfWeather() {
                 const response = await axios.get(url);
                 const weatherData = response.data.weather[0].main; // Получаем тип погоды из данных
                 setWeatherType(weatherData); // Сохраняем тип погоды в состоянии
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            } catch (error: any) {
+                if (error.response && error.response.status === 401) {
+                  // Обработка ошибки, если запрос был неудачным из-за ошибки 401 (например, неверный API ключ)
+                  console.error('Unauthorized error:', error);
+                } else if (error.response && error.response.status === 400) {
+                  // Ничего при ошибке 400
+                } else {
+                  console.error('Error fetching city suggestions:', error);
+                }
+              }
         };
 
         fetchData();

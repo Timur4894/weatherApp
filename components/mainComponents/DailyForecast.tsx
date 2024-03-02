@@ -33,8 +33,15 @@ function DailyForecast() {
         setWeatherTypes(types);
 
         setWeatherForecast(data);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          // Обработка ошибки, если запрос был неудачным из-за ошибки 401 (например, неверный API ключ)
+          console.error('Unauthorized error:', error);
+        } else if (error.response && error.response.status === 400) {
+          // Ничего при ошибке 400
+        } else {
+          console.error('Error fetching city suggestions:', error);
+        }
       }
     };
 
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   weatherinfo: {
-    width: 180,
+    width: 200,
     height: 80,
     alignItems: 'center',
     backgroundColor: '#0088ff5c',

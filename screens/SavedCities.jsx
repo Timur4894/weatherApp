@@ -3,15 +3,16 @@ import { View, Text, FlatList, StyleSheet, Pressable, ImageBackground } from 're
 import { useFavoriteCities } from '../context/FavoriteCitiesContext';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import DegreeForAll from '../components/mainComponents/DegreeForAll'; // Импортируем компонент с температурой
 
 function SavedCities() {
   const { favoriteCities } = useFavoriteCities();
   const navigation = useNavigation();
 
-  const image = { uri: 'https://img.freepik.com/free-vector/simple-gradient-background-vector-winter-blue_53876-105767.jpg?size=626&ext=jpg&ga=GA1.1.1803636316.1708387200&semt=ais' };
+  const image = {uri: 'https://media.istockphoto.com/id/184103864/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%B0-%D0%BD%D0%B0-%D0%BD%D0%B5%D0%B1%D0%B5.jpg?s=612x612&w=0&k=20&c=BxXc6oDcATVxnS_tQsWRdfy6QCKRExJbl54FOfcbWrg='};
 
   return (
-    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+    <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable style={styles.icon} onPress={() => navigation.navigate('MainScreen')}>
@@ -25,8 +26,13 @@ function SavedCities() {
             data={favoriteCities}
             renderItem={({ item }) => (
               <View style={styles.cityContainer}>
-                <Text style={styles.city}>{item}</Text>
-                <Text style={styles.city}>17°C</Text>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <View style={styles.innerCityContainer}>
+                  <Text style={styles.city}>{item}</Text>
+                  <DegreeForAll city={item}/> 
+                </View>
+
+                </ImageBackground>
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -34,7 +40,7 @@ function SavedCities() {
           />
         </View>
       </View>
-    </ImageBackground>
+    </>
   );
 }
 
@@ -42,7 +48,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: 50
+    backgroundColor: 'black'
+  },
+  innerCityContainer: {
+    flex: 1,
+    backgroundColor: '#3891de47',
+    borderColor: '#003b6f46',
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   contentContainer: {
     flex: 1,
@@ -51,21 +66,21 @@ const styles = StyleSheet.create({
   },
   cityContainer: {
     width: '100%',
-    height: 80,
+    height: 100,
     backgroundColor: '#3891de47',
     borderColor: '#003b6f46',
     borderWidth: 2,
     borderRadius: 15,
     marginBottom: 20,
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
+    overflow: 'hidden', 
   },
   city: {
-    fontSize: 28,
-    marginRight: 20,
-    marginLeft: 20,
-    fontWeight: '600'
+    fontSize: 38,
+    marginLeft: 10,
+    fontWeight: '600',
+    color: '#05447a'
   },
+
   image: {
     flex: 1,
     justifyContent: 'center',
@@ -80,8 +95,10 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 34,
+    marginTop: 50,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
 });
 
