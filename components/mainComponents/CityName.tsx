@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Pressable,TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useCity } from '../../context/local-store';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
 import { useFavoriteCities } from '../../context/FavoriteCitiesContext';
+import { storeCity, deleteCity } from "../../utils/http";
+import { AuthContext } from "../../context/auth-context";
 
-// Определим интерфейс для данных о городе
 interface CityData {
     sys: {
         country: string;
     };
 }
+
+
 function CityName() {
+
     const { selectedCity } = useCity();
     const [cityData, setCityData] = useState<CityData | null>(null);
     const { addFavoriteCity, removeFavoriteCity, favoriteCities } = useFavoriteCities();
+    const [cityId, setCityId] = useState(null); 
+    const authCtx = useContext(AuthContext);
+    const token = authCtx.token;
 
-
-    const navigation = useNavigation();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,10 +33,8 @@ function CityName() {
                 setCityData(response.data);
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
-                  // Обработка ошибки, если запрос был неудачным из-за ошибки 401 (например, неверный API ключ)
                   console.error('Unauthorized error:', error);
                 } else if (error.response && error.response.status === 400) {
-                  // Ничего при ошибке 400
                 } else {
                   console.error('Error fetching city suggestions:', error);
                 }
@@ -42,14 +44,38 @@ function CityName() {
         fetchData();
     }, [selectedCity]);
 
+
+    console.log(token)
     const handleToggleFavorite = (city: string) => {
         if (favoriteCities.includes(city)) {
           removeFavoriteCity(city);
+          handleDeleteCity()
         } else {
           addFavoriteCity(city);
+          handleStoreCity()
         }
-      };
+    };
 
+
+    const handleStoreCity = async () => {
+        try {
+            const ig = await storeCity({ token, city: { name: selectedCity } });
+            setCityId(ig)
+        } catch (error) {
+            console.error("Error storing city:", error);
+        }
+    };
+
+    
+
+    const handleDeleteCity = async () => {
+        try {
+            await deleteCity({ id: cityId,  token });
+            console.log("City deleted successfully");
+        } catch (error) {
+            console.error("Error deleting city:", error);
+        }
+    };
 
     return (
         <View style={styles.root}>
@@ -62,13 +88,13 @@ function CityName() {
                     </View>
                 )}
                 <View style={{marginLeft: 20}}>
-                <TouchableOpacity onPress={() => handleToggleFavorite(selectedCity)}>
-                    <Ionicons
-                        name={favoriteCities.includes(selectedCity) ? "star" : "star-outline"}
-                        size={32}
-                        color={favoriteCities.includes(selectedCity) ? "yellow" : "gray"}
-                    />
-                </TouchableOpacity> 
+                    <TouchableOpacity onPress={() => handleToggleFavorite(selectedCity)}>
+                        <Ionicons
+                            name={favoriteCities.includes(selectedCity) ? "star" : "star-outline"}
+                            size={32}
+                            color={favoriteCities.includes(selectedCity) ? "yellow" : "gray"}
+                        />
+                    </TouchableOpacity>
                 </View>
             
             </View>
@@ -80,7 +106,7 @@ const styles = StyleSheet.create({
     root: {
         flex: 1,
         alignItems: 'center',
-        marginLeft: 50
+        marginLeft: 50,
     },
     cityName: {
         fontSize: 25, 

@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, ImageBackground, } from 'react-native';
 import { login } from '../utils/auth';
+import { AuthContext } from '../context/auth-context';
 
 const LoginScreen = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+
+  const authCtx = useContext(AuthContext)
 
   const handleLogin = async () => {
     try {
       const token = await login(email, password);
-      onLogin(token);
+      authCtx.authenticate(token);
+      //console.log(token)
+      onLogin(); 
     } catch (error) {
       setError('Failed to login. Please check your credentials.');
       console.error(error) 
     }
   };
 
-  const image = {uri: 'https://papers.co/wallpaper/papers.co-so59-blur-gradation-pastel-soft-4-wallpaper.jpg'}
+  const image = {uri: 'https://freedesignfile.com/upload/2017/05/White-clouds-with-blue-sky-vector-background-01.jpg'}
 
   return (
+
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
 
         <View style={styles.container}>
@@ -50,6 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   image: {
     flex: 1,
